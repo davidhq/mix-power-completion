@@ -1,0 +1,87 @@
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+# Usage:
+# m      → mix help
+# m a    → mix archive
+# m h    → mix hex
+# m a.b  → mix archive.build
+# m d.co → mix deps.compile
+# m p.n  → mix phoenix.new
+function m {
+  if [ "$1" == "refresh" ]; then
+    mix help | grep ^mix | awk '{ print $2 }' | sed "s/#//" | grep -v help | grep . > ~/.mix_commands
+  elif [ ! -f ~/.mix_commands ]; then
+    m refresh
+    m $@
+  elif [ -z "$1" ]; then
+    mix help
+  else
+    local commands=`cat ~/.mix_commands`
+    if [[ $1 =~ \..+\. ]]; then
+      local shortcut=(${1//./ })
+      while read -r line; do
+        if [[ $line =~ \..+\. ]] ; then
+          local cmd=(${line//./ })
+          if [[ ${cmd[0]} == ${shortcut[0]}* ]] && [[ ${cmd[1]} == ${shortcut[1]}* ]] && [[ ${cmd[2]} == ${shortcut[2]}* ]]; then
+            shift
+            printf "${YELLOW}mix $line $@${NC}\n"
+            mix $line $@
+            return
+          fi
+        fi
+      done <<< "$commands"
+    elif [[ $1 =~ \. ]]; then
+      local shortcut=(${1//./ })
+      while read -r line; do
+        if [[ $line =~ \. ]] ; then
+          local cmd=(${line//./ })
+          if [[ ${cmd[0]} == ${shortcut[0]}* ]] && [[ ${cmd[1]} == ${shortcut[1]}* ]]; then
+            shift
+            printf "${YELLOW}mix $line $@${NC}\n"
+            mix $line $@
+            return
+          fi
+        fi
+      done <<< "$commands"
+    else
+      while read -r line; do
+        if [[ $line == $1* ]]; then
+          shift
+          printf "${YELLOW}mix $line $@${NC}\n"
+          mix $line $@
+          return
+        fi
+      done <<< "$commands"
+    fi
+    local new_commands=`mix help | grep ^mix | awk '{ print $2 }' | sed "s/#//" | grep -v help | grep .`
+    local added=false
+    while read -r line; do
+      if ! printf '%s\n\0' "${commands[@]}" | grep -Fqx $line
+      then
+        added=true
+        printf "Added ${GREEN}$line${NC}\n"
+        echo $line >> ~/.mix_commands
+      fi
+    done <<< "$new_commands"
+    if [ $added == true ]; then
+      m $@
+    else
+      printf "${RED}Task not found${NC}\n"
+    fi
+  fi
+}
+
+_mix()
+{
+    local cur prev opts
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    opts=`mix help | grep ^mix | awk '{ print $2 }' | sed "s/#//" | grep -v help | grep .`
+
+    COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+    return 0
+}
+complete -F _mix m
+complete -F _mix mix
