@@ -16,8 +16,12 @@ function m {
   elif [ ! -f ~/.mix_commands ]; then
     m refresh
     m $@
-  elif [ -z "$1" ]; then
-    mix help
+    printf "\nCreated ${YELLOW}~/.mix_commands${NC}...\n\n"
+    printf "Use shortcuts:\n"
+    printf "  ${YELLOW}m a${NC} → ${GREEN}mix archive${NC}\n"
+    printf "  ${YELLOW}m d.co${NC} → ${GREEN}mix deps.compile${NC}\n"
+  elif [ -z "$1" ] || [ "$1" == "help" ]; then
+    mix help | sed "s/^/\\${GREEN}/" | sed "s/#/\\${NC}/" | xargs -0 printf
   else
     local commands=`cat ~/.mix_commands`
     if [[ $1 =~ \..+\. ]]; then
@@ -61,6 +65,9 @@ function m {
     while read -r line; do
       if ! printf '%s\n\0' "${commands[@]}" | grep -Fqx $line
       then
+        if ! $added ; then
+          printf "Adding to ${YELLOW}~/.mix_commands${NC}:\n"
+        fi
         added=true
         printf "Added ${GREEN}$line${NC}\n"
         echo $line >> ~/.mix_commands

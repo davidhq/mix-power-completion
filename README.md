@@ -1,9 +1,9 @@
-Elixir Mix completion with extra shortcuts
-==========================================
+Mix completion plus shortcuts and colors
+========================================
 
 Bash autocompletion for Elixir [mix](http://elixir-lang.org/getting-started/mix-otp/introduction-to-mix.html).
 
-Don't forget to check the **power feature** on the bottom.
+Don't forget to check the **power feature(s)** on the bottom.
 
 ## Installation
 
@@ -19,11 +19,13 @@ Local:
 
     $ ~/bash_completion.d
     $ cp mix ~/bash_completion.d/
-    $ echo "" >> ~/.bashrc
-    $ echo 'if [ -f "$HOME/bash_completion.d/mix" ] ; then' >> ~/.bashrc
-    $ echo '    . $HOME/bash_completion.d/mix' >> ~/.bashrc
-    $ echo "fi" >> ~/.bashrc
-    $ . ~/bash_completion.d/mix
+
+Add to `~/.bashrc`:
+
+    if [ -f "$HOME/bash_completion.d/mix" ] ; then
+        . $HOME/bash_completion.d/mix
+    fi
+    . ~/bash_completion.d/mix
 
 ## Brew completions
 
@@ -41,13 +43,15 @@ To complete command:
     $ m t[TAB]
     $ m test
 
-There is a slight lag before completion because mix has to check what is available in current directory.
+There is a slight lag before completion because mix has to check what is available for current project.
 
-You can also use the normal `mix` command here instead of `m` (but the feature below doen't work with it and it doesn't make sense because we want the shortest command possible).
+You can also use the normal `mix` command here instead of `m` (but the features below won't work).
 
-## Power feature — shortcuts
+## Power features
 
-You can invoke commands in a shorter way without pressing `tab`:
+### Shortcuts
+
+You can invoke tasks in a shorter way without pressing `tab`:
 
     m      → mix help
     m a    → mix archive
@@ -55,3 +59,7 @@ You can invoke commands in a shorter way without pressing `tab`:
     m a.b  → mix archive.build
     m d.co → mix deps.compile
     m p.n  → mix phoenix.new
+
+### Colorize
+
+When you execute `m` (or `m help`), tasks are colored green.
