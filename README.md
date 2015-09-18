@@ -1,5 +1,5 @@
-Mix Bash completion with extra goodies
-======================================
+Elixir Mix completion with extra shortcuts
+==========================================
 
 Bash autocompletion for Elixir [mix](http://elixir-lang.org/getting-started/mix-otp/introduction-to-mix.html).
 
@@ -45,7 +45,7 @@ There is a slight lag before completion because mix has to check what is availab
 
 You can also use the normal `mix` command here instead of `m` (but the feature below doen't work with it and it doesn't make sense because we want the shortest command possible).
 
-## Power feature
+## Power feature — shortcuts
 
 You can invoke commands in a shorter way without pressing `tab`:
 
