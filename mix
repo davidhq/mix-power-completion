@@ -12,7 +12,7 @@ NC='\033[0m' # No Color
 # m p.n  → mix phoenix.new
 function m {
   if [ "$1" == "refresh" ]; then
-    mix help | grep ^mix | awk '{ print $2 }' | sed "s/#//" | grep -v help | grep . > ~/.mix_tasks
+    mix help | grep ^mix | awk '{ print $2 }' | sed "s/#//" | grep -v help | grep . | awk '{ print length, $0 }' | sort -n -s | cut -d" " -f2- > ~/.mix_tasks
   elif [ ! -f ~/.mix_tasks ]; then
     m refresh
     m $@
@@ -74,6 +74,8 @@ function m {
       fi
     done <<< "$new_commands"
     if [ $added == true ]; then
+      cat ~/.mix_tasks | awk '{ print length, $0 }' | sort -n -s | cut -d" " -f2- > ~/._mix_tasks
+      mv ~/._mix_tasks ~/.mix_tasks
       m $@
     else
       printf "${RED}Task not found${NC}\n"
