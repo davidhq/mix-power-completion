@@ -1,7 +1,8 @@
+#!/bin/bash
 RED=$(tput setaf 1)
 GREEN=$(tput setaf 2)
 YELLOW=$(tput setaf 3)
-NC=$(tput setaf 10) # No Color
+NC='\033[0m' # No Color
 
 # Usage:
 # m      → mix help
