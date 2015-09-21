@@ -51,7 +51,7 @@ You can also use the normal `mix` command here instead of `m` (but the features 
 
 ### Shortcuts
 
-You can invoke tasks in a shorter way without pressing `tab`:
+You can invoke tasks in a shorter way without pressing `TAB`:
 
     m      → mix help
     m a    → mix archive
