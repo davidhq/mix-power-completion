@@ -67,7 +67,7 @@ function m {
       if ! printf '%s\n\0' "${commands[@]}" | grep -Fqx $line
       then
         if ! $added ; then
-          printf "Adding to ${YELLOW}~/.mix_tasks${NC}:\n"
+          printf "Adding to ${YELLOW}~/.mix_tasks${NC} for shortcut resolution:\n"
         fi
         added=true
         printf "Added ${GREEN}$line${NC}\n"
